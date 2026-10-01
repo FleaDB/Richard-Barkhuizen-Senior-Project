@@ -44,4 +44,33 @@ public class deckLoader
         }
     }
 
+    public void printDecks()
+    {
+        for(int i = 0; i < decks.size(); i++){
+            DeckData d = decks.get(i);
+            System.out.println("\nDeck "+(i+1)+"\nLeader: "+d.leader_card_code+"\nFormat: "+d.format+
+                    "\nPlayer Placement: "+d.placement+"\nDate of Tournament: "+d.date);
+            for(CardData c : d.deck)
+            {
+                System.out.println(" "+c.count+"x"+c.card_id);
+            }
+        }
+    }
+
+    //return unique cards for itemsets
+    public List<String> getTransaction()
+    {
+        List<String> transaction = new ArrayList<>();
+
+        for(DeckData d : decks){
+            for(CardData c : d.deck)
+            {
+                if(!transaction.contains(c.card_id))
+                {
+                    transaction.add(c.card_id);
+                }
+            }
+        }
+        return transaction;
+    }
 }
