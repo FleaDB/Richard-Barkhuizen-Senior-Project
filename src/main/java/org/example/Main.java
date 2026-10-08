@@ -13,13 +13,13 @@ public class Main
 
         loader.printDecks(); */
         List<List<String>> test = new ArrayList<>();
-        test.add(Arrays.asList("A", "B", "C"));
-        test.add(Arrays.asList("A", "B", "D"));
-        test.add(Arrays.asList("A", "B", "C", "D"));
-        test.add(Arrays.asList("A", "C"));
-        test.add(Arrays.asList("B", "C"));
+        test.add(Arrays.asList("EB04-002", "OP13-016", "OP15-035"));
+        test.add(Arrays.asList("EB04-002", "OP13-016", "ST21-003"));
+        test.add(Arrays.asList("EB04-002", "OP13-016", "OP15-035", "ST21-003"));
+        test.add(Arrays.asList("EB04-002", "OP15-035"));
+        test.add(Arrays.asList("OP13-016", "OP15-035"));
 
         AprioriAlgorithm miner = new AprioriAlgorithm();
-        miner.mineFrequentItemsets(test, 60);   // 60% of 5 decks = minCount 3
+        miner.mineFrequentItemsets(test, 60);   //60% of 5 decks = minCount 3
     }
 }
