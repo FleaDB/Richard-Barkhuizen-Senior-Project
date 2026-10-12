@@ -54,6 +54,7 @@ public class AprioriAlgorithm
         }
         System.out.println(currentLevel);
 
+        //add compar in doc for the 2 below
         List<List<String>> allPairs = new ArrayList<>();
         for(int i = 0; i < currentLevel.size()-1; i++)
         {
@@ -66,10 +67,31 @@ public class AprioriAlgorithm
 
                 int count = countSup(pair, transaction);
                 if(count >= minCount){
-                    System.out.println(pair + " Count " + count);
+                    System.out.println("First test" + pair + " Count " + count);
                     allPairs.add(pair);
                 }
             }
+        }
+
+        List<List<String>> allFreq = new ArrayList<>(currentLevel);
+        int k=2;
+        while(!currentLevel.isEmpty())
+        {
+            List<List<String>> candidates = genCandidates(currentLevel, k);
+            List<List<String>> nextLevel = new ArrayList<>();
+
+            for(List<String> cand : candidates)
+            {
+                int count = countSup(cand, transaction);
+
+                if(count >= minCount){
+                    nextLevel.add(cand);
+                    System.out.println("Second Test " + cand + " " + count);
+                }
+            }
+            allFreq.addAll(nextLevel);
+            currentLevel = nextLevel;
+            k++;
         }
     }
 
@@ -90,8 +112,8 @@ public class AprioriAlgorithm
         List<List<String>> candidates = new ArrayList<>();
 
         for(int i = 0; i < prevLevel.size()-1; i++){
-            for (int j = i+1; j < prevLevel.size()-1; j++){
-                List<String> merg = prevLevel.get(i);
+            for (int j = i+1; j < prevLevel.size(); j++){
+                List<String> merg = new ArrayList<>(prevLevel.get(i));
                 for(String set : prevLevel.get(j))
                 {
                     if(!merg.contains(set))
@@ -99,9 +121,17 @@ public class AprioriAlgorithm
                         merg.add(set);
                     }
                 }
+                if(merg.size()!=k){
+                    continue;
+                }
+                Collections.sort(merg);
+                if (candidates.containsAll(merg))
+                {
+                    continue;
+                }
+                candidates.add(merg);
             }
         }
-
         return candidates;
     }
 }
