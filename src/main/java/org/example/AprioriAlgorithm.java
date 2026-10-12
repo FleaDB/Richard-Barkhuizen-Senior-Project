@@ -84,5 +84,25 @@ public class AprioriAlgorithm
         }
         return count;
     }
+
+    private List<List<String>> genCandidates(List<List<String>> prevLevel, int k)
+    {
+        List<List<String>> candidates = new ArrayList<>();
+
+        for(int i = 0; i < prevLevel.size()-1; i++){
+            for (int j = i+1; j < prevLevel.size()-1; j++){
+                List<String> merg = prevLevel.get(i);
+                for(String set : prevLevel.get(j))
+                {
+                    if(!merg.contains(set))
+                    {
+                        merg.add(set);
+                    }
+                }
+            }
+        }
+
+        return candidates;
+    }
 }
 
