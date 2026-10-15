@@ -16,10 +16,15 @@ public class AprioriAlgorithm
             this.count = count;
             this.support = support;
         }
+        @Override
+        public String toString()
+        {
+            return cards + " in " + count + " decks with support level" + support + "%";
+        }
     }
 
     //need to pass a list of lists being the card ID
-    public void mineFrequentItemsets(List<List<String>> transaction, double minSup)
+    public List<Itemset> mineFrequentItemsets(List<List<String>> transaction, double minSup)
     {
         int decks = transaction.size();
         int minCount = (int)Math.ceil((minSup*decks)/100.0);
@@ -42,6 +47,8 @@ public class AprioriAlgorithm
         }
         System.out.println(singleCount);//test output with randome sets of data
 
+        List<Itemset> result = new ArrayList<>();
+
         List<List<String>> currentLevel = new ArrayList<>();
         for(String card: singleCount.keySet())
         {
@@ -50,6 +57,7 @@ public class AprioriAlgorithm
                 List<String> single = new ArrayList<>();
                 single.add(card);
                 currentLevel.add(single);
+                result.add(new Itemset(single, singleCount.get(card), (100.0*singleCount.get(card))/decks));
             }
         }
         System.out.println(currentLevel);
@@ -67,7 +75,7 @@ public class AprioriAlgorithm
 
                 int count = countSup(pair, transaction);
                 if(count >= minCount){
-                    System.out.println("First test" + pair + " Count " + count);
+                    //System.out.println("First test" + pair + " Count " + count);
                     allPairs.add(pair);
                 }
             }
@@ -86,14 +94,17 @@ public class AprioriAlgorithm
 
                 if(count >= minCount){
                     nextLevel.add(cand);
-                    System.out.println("Second Test " + cand + " " + count);
+                    //System.out.println("Second Test " + cand + " " + count);
+                    result.add(new Itemset(cand, count, (100.0*count)/decks));
                 }
             }
             allFreq.addAll(nextLevel);
             currentLevel = nextLevel;
             k++;
         }
+        return result;
     }
+
 
     private int countSup(List<String> candidate,List<List<String>> transaction)
     {
@@ -125,7 +136,11 @@ public class AprioriAlgorithm
                     continue;
                 }
                 Collections.sort(merg);
-                if (candidates.containsAll(merg))
+                if (candidates.contains(merg))
+                {
+                    continue;
+                }
+                if(!allPieceFreq(merg, prevLevel))
                 {
                     continue;
                 }
@@ -134,5 +149,20 @@ public class AprioriAlgorithm
         }
         return candidates;
     }
+
+    private boolean allPieceFreq(List<String> candidates, List<List<String>> prevLevel)
+    {
+        for(int i=0; i < candidates.size(); i++)
+        {
+            List<String> part = new ArrayList<>(candidates);
+            part.remove(i);
+            if (!prevLevel.contains(part))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
 
