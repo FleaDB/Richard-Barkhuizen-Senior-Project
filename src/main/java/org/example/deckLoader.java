@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -55,6 +56,25 @@ public class deckLoader
                 System.out.println(" "+c.count+"x"+c.card_id);
             }
         }
+    }
+
+    public HashMap<String, Integer> getLeaderCounts(){
+        HashMap<String, Integer> counts = new HashMap<>();
+
+        for(DeckData d : decks)
+        {
+            String curLeader = d.leader_card_code;
+            if(counts.containsKey(curLeader))
+            {
+                counts.put(curLeader, counts.get(curLeader)+1);
+            }
+            else
+            {
+                counts.put(curLeader, 1);
+            }
+        }
+
+        return counts;
     }
 
     //return unique cards for itemsets

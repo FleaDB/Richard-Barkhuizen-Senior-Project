@@ -40,7 +40,7 @@ public class Main
         ));
 
         AprioriAlgorithm miner = new AprioriAlgorithm();
-        List<AprioriAlgorithm.Itemset> results = miner.mineFrequentItemsets(test, 50); //test with 50 as 60 isnt working, need larger data size to make it more efficient
+        List<AprioriAlgorithm.Itemset> results = miner.mineFrequentItemsets(test, 40); //test with 50 as 60 isnt working, need larger data size to make it more efficient
         for (AprioriAlgorithm.Itemset s : results)
         {
             System.out.println(s);
