@@ -19,7 +19,7 @@ public class AprioriAlgorithm
         @Override
         public String toString()
         {
-            return cards + " in " + count + " decks with support level" + support + "%";
+            return cards + " in " + count + " decks with support level " + String.format("%.2f", support) + "%";
         }
     }
 
