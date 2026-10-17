@@ -78,17 +78,23 @@ public class deckLoader
     }
 
     //return unique cards for itemsets
-    public List<String> getTransaction()
+    public List<List<String>> getTransaction(String leader)
     {
-        List<String> transaction = new ArrayList<>();
+        List<List<String>> transaction = new ArrayList<>();
 
-        for(DeckData d : decks){
-            for(CardData c : d.deck)
+        for(DeckData d : decks)
+        {
+            if(leader.equals(d.leader_card_code))
             {
-                if(!transaction.contains(c.card_id))
+                List<String> id = new ArrayList<>();
+                for(CardData c : d.deck)
                 {
-                    transaction.add(c.card_id);
+                    if(!id.contains(c.card_id))
+                    {
+                        id.add(c.card_id);
+                    }
                 }
+                transaction.add(id);
             }
         }
         return transaction;
