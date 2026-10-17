@@ -13,10 +13,27 @@ public class Main
         AprioriAlgorithm ap = new AprioriAlgorithm();
 
         Scanner in = new Scanner(System.in);
-        System.out.print("Enter Leader code: ");
-        String uLeader =in.nextLine().trim().toUpperCase();
-        System.out.print("Supp %: ");
-        double minSup = Double.parseDouble(in.nextLine().trim());
+        boolean check = true;
+
+        String uLeader = "";
+        double minSup = 0.0;
+
+        while(check)
+        {
+            System.out.print("Enter Leader code: ");
+            uLeader =in.nextLine().trim().toUpperCase();
+
+            if(loader.getTransaction(uLeader).isEmpty())
+            {
+                System.out.println("No leader found please enter it again\n");
+            }
+            else
+            {
+                System.out.print("Supp (0-100)%: ");
+                minSup = Double.parseDouble(in.nextLine().trim());
+                check = false;
+            }
+        }
 
         List<AprioriAlgorithm.Itemset> results = ap.mineFrequentItemsets(loader.getTransaction(uLeader), minSup);
         System.out.println(results.size() + " itemsets for " + uLeader);
