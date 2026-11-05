@@ -60,8 +60,9 @@ public class AprioriAlgorithm
                 result.add(new Itemset(single, singleCount.get(card), (100.0*singleCount.get(card))/decks));
             }
         }
-        System.out.println(currentLevel);
+        //System.out.println(currentLevel);
 
+        /*
         //add compar in doc for the 2 below
         List<List<String>> allPairs = new ArrayList<>();
         for(int i = 0; i < currentLevel.size()-1; i++)
@@ -79,9 +80,8 @@ public class AprioriAlgorithm
                     allPairs.add(pair);
                 }
             }
-        }
+        }*/
 
-        List<List<String>> allFreq = new ArrayList<>(currentLevel);
         int k=2;
         while(!currentLevel.isEmpty())
         {
@@ -98,7 +98,6 @@ public class AprioriAlgorithm
                     result.add(new Itemset(cand, count, (100.0*count)/decks));
                 }
             }
-            allFreq.addAll(nextLevel);
             currentLevel = nextLevel;
             k++;
         }
