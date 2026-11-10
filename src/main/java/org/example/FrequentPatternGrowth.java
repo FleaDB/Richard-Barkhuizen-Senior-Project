@@ -79,5 +79,6 @@ public class FrequentPatternGrowth
                 frequent.add(card);
             }
         }
+        frequent.sort(Comparator.comparing((String s) -> count.get(s)).reversed().thenComparing(Comparator.naturalOrder()));
     }
 }
