@@ -42,5 +42,22 @@ public class FrequentPatternGrowth
                 cur = child;
             }
         }
+
+        List<Node> singlePath()
+        {
+            List<Node> path = new ArrayList<>();
+            Node cur = root;
+
+            while(!cur.children.isEmpty())
+            {
+                if(cur.children.size()>1)//check for 2 branches
+                {
+                    return null;
+                }
+                cur = cur.children.values().iterator().next();
+                path.add(cur);
+            }
+            return path;
+        }
     }
 }
