@@ -60,4 +60,24 @@ public class FrequentPatternGrowth
             return path;
         }
     }
+
+    private HashMap<String, Integer> rankFrequent(List<List<String>> transaction, int minCount)
+    {
+        HashMap<String, Integer> count = new HashMap<>();
+        for(List<String> deck : transaction)
+        {
+            for(String card : deck)
+            {
+                count.merge(card, 1, Integer::sum);
+            }
+        }
+        List<String> frequent = new ArrayList<>();
+        for(String card : count.keySet())
+        {
+            if(count.get(card) >= minCount)
+            {
+                frequent.add(card);
+            }
+        }
+    }
 }
