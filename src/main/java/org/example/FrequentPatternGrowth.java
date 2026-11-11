@@ -80,5 +80,31 @@ public class FrequentPatternGrowth
             }
         }
         frequent.sort(Comparator.comparing((String s) -> count.get(s)).reversed().thenComparing(Comparator.naturalOrder()));
+
+        HashMap<String, Integer> rank = new HashMap<>();
+        for(int i = 0; i < frequent.size(); i++)
+        {
+            rank.put(frequent.get(i), i);
+        }
+        return rank;
+    }
+
+    private Tree buildTree(List<List<String>> transaction, HashMap<String, Integer> rank)
+    {
+        Tree tree = new Tree();
+        for(List<String>deck : transaction)
+        {
+            List<String> cards = new ArrayList<>();
+            for(String card : deck)
+            {
+                if(rank.containsKey(card))
+                {
+                    cards.add(card);
+                }
+            }
+            cards.sort(Comparator.comparingInt(rank::get));
+            tree.insert(cards, 1);
+        }
+        return tree;
     }
 }
