@@ -107,4 +107,28 @@ public class FrequentPatternGrowth
         }
         return tree;
     }
+
+    private void addItemset(List<String> cards, int count, int decks, List<AprioriAlgorithm.Itemset> result){
+        List<String> sorted = new ArrayList<>(cards);
+        Collections.sort(sorted);
+        result.add(new AprioriAlgorithm.Itemset(sorted, count, (100.0*count)/decks));
+    }
+
+    private void genFromPath(List<Node> path, int from, List<String> chosen,
+                             int smallest, List<String> alpha, int decks, List<AprioriAlgorithm.Itemset> result)
+    {
+        for(int i = 0; i < path.size(); i++)
+        {
+            Node node = path.get(i);
+            chosen.add(node.card);
+            int support = Math.min(smallest, node.count);
+
+            List<String> pattern = new ArrayList<>(chosen);
+            pattern.addAll(alpha);
+            addItemset(pattern, support, decks, result);
+
+            genFromPath(path, i+1, chosen, support, alpha, decks, result);
+            chosen.remove(chosen.size()-1);
+        }
+    }
 }
