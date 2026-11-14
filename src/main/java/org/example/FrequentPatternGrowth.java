@@ -132,6 +132,17 @@ public class FrequentPatternGrowth
         }
     }
 
+    private static class Prefixpath//path above node
+    {
+        List<String> cards;
+        int count;
+
+        Prefixpath(List<String> cards, int count){
+            this.cards = cards;
+            this.count = count;
+        }
+    }
+
     private void fpgrowth (Tree tree, List<String> alpha, int minCount, int decks,
                            List<AprioriAlgorithm.Itemset> result)
     {
@@ -142,7 +153,14 @@ public class FrequentPatternGrowth
         }
         else
         {
+            for(String card: tree.nodes.keySet())
+            {
+                List<String> beta = new ArrayList<>(alpha);
+                beta.add(card);
+                addItemset(beta, tree.total.get(card), decks, result);
 
+                
+            }
         }
     }
 }
