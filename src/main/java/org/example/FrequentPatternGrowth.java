@@ -131,4 +131,18 @@ public class FrequentPatternGrowth
             chosen.remove(chosen.size()-1);
         }
     }
+
+    private void fpgrowth (Tree tree, List<String> alpha, int minCount, int decks,
+                           List<AprioriAlgorithm.Itemset> result)
+    {
+        List<Node> path = tree.singlePath();
+        if(path != null)
+        {
+            genFromPath(path, 0, new ArrayList<>(), Integer.MAX_VALUE, alpha, decks, result);
+        }
+        else
+        {
+
+        }
+    }
 }
