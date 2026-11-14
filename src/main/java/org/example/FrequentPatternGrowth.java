@@ -143,6 +143,25 @@ public class FrequentPatternGrowth
         }
     }
 
+    private List<Prefixpath> conditionalPatternBase(Tree tree, String card)//need to check incase root check is needed
+    {
+        List<Prefixpath> base = new ArrayList<>();
+
+        for(Node node: tree.nodes.get(card))
+        {
+            List<String> cards = new ArrayList<>();
+            for(Node p = node.parent; p.card != null; p = p.parent)//go up tree
+            {
+                cards.add(p.card);
+            }
+            Collections.reverse(cards);//sets it in order from before
+            if(!cards.isEmpty()){
+                base.add(new Prefixpath(cards, node.count));
+            }
+        }
+        return base;
+    }
+
     private void fpgrowth (Tree tree, List<String> alpha, int minCount, int decks,
                            List<AprioriAlgorithm.Itemset> result)
     {
@@ -159,7 +178,6 @@ public class FrequentPatternGrowth
                 beta.add(card);
                 addItemset(beta, tree.total.get(card), decks, result);
 
-                
             }
         }
     }
