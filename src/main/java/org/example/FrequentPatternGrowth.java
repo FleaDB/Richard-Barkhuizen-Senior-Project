@@ -162,6 +162,31 @@ public class FrequentPatternGrowth
         return base;
     }
 
+    private Tree conditionalTree(List<Prefixpath> base, int minCount)
+    {
+        HashMap<String, Integer> countBase = new HashMap<>();
+        for(Prefixpath p : base)
+        {
+            for(String card : p.cards)
+            {
+                countBase.merge(card, p.count, Integer::sum);
+            }
+        }
+
+        Tree conditional = new Tree();
+        for(Prefixpath p : base)
+        {
+            List<String> freq = new ArrayList<>();
+            for(String card : p.cards)
+            {
+                if(countBase.get(card) >- minCount)
+                {
+                    freq.add(card);
+                }
+            }
+        }
+    }
+
     private void fpgrowth (Tree tree, List<String> alpha, int minCount, int decks,
                            List<AprioriAlgorithm.Itemset> result)
     {
@@ -178,6 +203,7 @@ public class FrequentPatternGrowth
                 beta.add(card);
                 addItemset(beta, tree.total.get(card), decks, result);
 
+                List<Prefixpath> base = conditionalPatternBase(tree, card);
             }
         }
     }
