@@ -179,7 +179,7 @@ public class FrequentPatternGrowth
             List<String> freq = new ArrayList<>();
             for(String card : p.cards)
             {
-                if(countBase.get(card) >- minCount)
+                if(countBase.get(card) >= minCount)
                 {
                     freq.add(card);
                 }
@@ -212,5 +212,17 @@ public class FrequentPatternGrowth
                 }
             }
         }
+    }
+
+    public List<AprioriAlgorithm.Itemset> mineFreqItemsets(List<List<String>> transaction, double minSup)
+    {
+        int decks = transaction.size();
+        int minCount = (int)Math.ceil((minSup*decks)/100.0);
+
+        Tree tree = buildTree(transaction, rankFrequent(transaction, minCount));
+        List<AprioriAlgorithm.Itemset> result = new ArrayList<>();
+        fpgrowth(tree, new ArrayList<>(), minCount, decks, result);
+
+        return result;
     }
 }
