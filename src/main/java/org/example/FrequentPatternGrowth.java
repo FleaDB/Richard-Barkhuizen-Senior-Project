@@ -184,7 +184,9 @@ public class FrequentPatternGrowth
                     freq.add(card);
                 }
             }
+            conditional.insert(freq, p.count);
         }
+        return conditional;
     }
 
     private void fpgrowth (Tree tree, List<String> alpha, int minCount, int decks,
@@ -202,8 +204,12 @@ public class FrequentPatternGrowth
                 List<String> beta = new ArrayList<>(alpha);
                 beta.add(card);
                 addItemset(beta, tree.total.get(card), decks, result);
-
                 List<Prefixpath> base = conditionalPatternBase(tree, card);
+                Tree cond = conditionalTree(base, minCount);
+                if(!cond.nodes.isEmpty())
+                {
+                    fpgrowth(cond, beta, minCount, decks, result);
+                }
             }
         }
     }
