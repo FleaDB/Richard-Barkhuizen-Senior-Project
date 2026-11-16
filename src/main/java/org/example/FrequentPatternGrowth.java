@@ -117,7 +117,7 @@ public class FrequentPatternGrowth
     private void genFromPath(List<Node> path, int from, List<String> chosen,
                              int smallest, List<String> alpha, int decks, List<AprioriAlgorithm.Itemset> result)
     {
-        for(int i = 0; i < path.size(); i++)
+        for(int i = from; i < path.size(); i++)
         {
             Node node = path.get(i);
             chosen.add(node.card);

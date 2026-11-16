@@ -60,27 +60,6 @@ public class AprioriAlgorithm
                 result.add(new Itemset(single, singleCount.get(card), (100.0*singleCount.get(card))/decks));
             }
         }
-        //System.out.println(currentLevel);
-
-        /*
-        //add compar in doc for the 2 below
-        List<List<String>> allPairs = new ArrayList<>();
-        for(int i = 0; i < currentLevel.size()-1; i++)
-        {
-            for(int j = i+1; j < currentLevel.size(); j++)
-            {
-                List<String> pair = new ArrayList<>();
-                pair.add(currentLevel.get(i).get(0));
-                pair.add(currentLevel.get(j).get(0));
-                Collections.sort(pair);
-
-                int count = countSup(pair, transaction);
-                if(count >= minCount){
-                    //System.out.println("First test" + pair + " Count " + count);
-                    allPairs.add(pair);
-                }
-            }
-        }*/
 
         int k=2;
         while(!currentLevel.isEmpty())
@@ -103,7 +82,6 @@ public class AprioriAlgorithm
         }
         return result;
     }
-
 
     private int countSup(List<String> candidate,List<List<String>> transaction)
     {

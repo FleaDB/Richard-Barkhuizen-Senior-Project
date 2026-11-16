@@ -38,5 +38,17 @@ public class Main
         List<AprioriAlgorithm.Itemset> results = ap.mineFrequentItemsets(loader.getTransaction(uLeader), minSup);
         System.out.println(results.size() + " itemsets for " + uLeader);
         for(AprioriAlgorithm.Itemset s : results) System.out.println(s);
+
+        System.out.println("\n\n");
+        runFPGrowth(loader, uLeader, minSup);
+    }
+    
+    public static void runFPGrowth(deckLoader loader, String leader, double minSup)
+    {
+        FrequentPatternGrowth fp = new FrequentPatternGrowth();
+        List<AprioriAlgorithm.Itemset> results = fp.mineFreqItemsets(loader.getTransaction(leader), minSup);
+
+        System.out.println("FP-Growth: " + results.size() + " itemsets for " + leader);
+        for(AprioriAlgorithm.Itemset s : results) System.out.println(s);
     }
 }
