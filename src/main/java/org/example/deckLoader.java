@@ -9,8 +9,6 @@ Ref: https://medium.com/@alexandre.therrien3/personalized-serializer-and-deseria
 package org.example;
 
 import com.google.gson.Gson;
-
-import javax.smartcardio.Card;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
