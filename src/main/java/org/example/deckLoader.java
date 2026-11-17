@@ -9,12 +9,11 @@ Ref: https://medium.com/@alexandre.therrien3/personalized-serializer-and-deseria
 package org.example;
 
 import com.google.gson.Gson;
+
+import javax.smartcardio.Card;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 public class deckLoader
@@ -31,6 +30,18 @@ public class deckLoader
         String date;
         String format;
         String placement;
+    }
+
+    public static class DeckPlacements
+    {
+        Set<String> cards;
+        int placement;
+
+        DeckPlacements(Set<String> cards, int placement)
+        {
+            this.cards = cards;
+            this.placement = placement;
+        }
     }
 
     private final List<DeckData> decks;
@@ -98,5 +109,34 @@ public class deckLoader
             }
         }
         return transaction;
+    }
+
+    public List<DeckPlacements> getPlacementDeck(String leader)
+    {
+        List<DeckPlacements> result = new ArrayList<>();
+
+        for(DeckData d : decks)
+        {
+            if(leader.equals(d.leader_card_code) && d.placement != null)
+            {
+                int place;
+                try
+                {
+                    place = Integer.parseInt(d.placement.trim());
+                }
+                catch(NumberFormatException e)
+                {
+                    continue;
+                }
+
+                Set<String> cards = new HashSet<>();
+                for(CardData c : d.deck)
+                {
+                    cards.add(c.card_id);
+                }
+                result.add(new DeckPlacements(cards, place));
+            }
+        }
+        return result;
     }
 }
