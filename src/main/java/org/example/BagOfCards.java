@@ -14,5 +14,18 @@ public class BagOfCards
 
     private double[] weights;
     private double bias;
-    
+
+    private void addCardFeature(List<deckLoader.DeckPlacements> training)
+    {
+        TreeSet<String> cards = new TreeSet<>();
+        for(deckLoader.DeckPlacements deck : training)
+        {
+            cards.addAll(deck.cards);
+        }
+        for(String card : cards)
+        {
+            cardFeature.put(card, featureNames.size());
+            featureNames.add(card);
+        }
+    }
 }
