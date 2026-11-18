@@ -28,4 +28,31 @@ public class BagOfCards
             featureNames.add(card);
         }
     }
+
+    private void addPairfeatures(List<AprioriAlgorithm.Itemset> itemsets, int maxPairs)
+    {
+        List<AprioriAlgorithm.Itemset> pairs = new ArrayList<>();
+        for(AprioriAlgorithm.Itemset s : itemsets)
+        {
+            if(s.cards.size() == 2 && cardFeature.containsKey(s.cards.get(0)) && cardFeature.containsKey(s.cards.get(1)))
+            {
+                pairs.add(s);
+            }
+        }
+        pairs.sort((a, b) ->{
+            if(a.count != b.count)
+            {
+                return b.count - a.count;
+            }
+            return a.cards.toString().compareTo(b.cards.toString());
+        });
+        for(int i = 0; i < pairs.size() && i < maxPairs; i++)
+        {
+            List<String> cards = new ArrayList<>(pairs.get(i).cards);
+            Collections.sort(cards);
+            pairFeatures.add(new String[]{cards.get(0), cards.get(1)});
+            pairFeatureNum.add(featureNames.size());
+            featureNames.add(cards.get(0) + " + " + cards.get((1)));
+        }
+    }
 }
