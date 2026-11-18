@@ -155,4 +155,16 @@ public class BagOfCards
         }
         return result;
     }
+
+    public int featureCount()
+    {
+        return featureNames.size();
+    }
+
+    public BagOfCards(List<deckLoader.DeckPlacements> trainingData, List<AprioriAlgorithm.Itemset> itemsets, int topCut, int maxPairs)
+    {
+        addCardFeature(trainingData);
+        addPairfeatures(itemsets, maxPairs);
+        train(trainingData, topCut);
+    }
 }
