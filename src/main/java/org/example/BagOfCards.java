@@ -55,4 +55,32 @@ public class BagOfCards
             featureNames.add(cards.get(0) + " + " + cards.get((1)));
         }
     }
+
+    private int[] activeFeatures(Set<String> cards)
+    {
+        List<Integer> active = new ArrayList<>();
+        for(String card : cards)
+        {
+            Integer feature = cardFeature.get(card);
+            if(feature != null)
+            {
+                active.add(feature);
+            }
+        }
+        for(int i = 0; i < pairFeatures.size(); i++)
+        {
+            String[] pair = pairFeatures.get(i);
+            if(cards.contains(pair[0]) && cards.contains(pair[i]))
+            {
+                active.add(pairFeatureNum.get(i));
+            }
+        }
+
+        int[] result = new int[active.size()];
+        for(int i = 0; i < result.length; i++)
+        {
+            result[i] = active.get(i);
+        }
+        return result;
+    }
 }
