@@ -127,4 +127,32 @@ public class BagOfCards
             bias -= LEARNING_RATE * biasGradient / n;
         }
     }
+
+    private double rating(Set<String> cards)
+    {
+        double sum = 0;
+        for(int f: activeFeatures(cards))
+        {
+            sum += weights[f];
+        }
+        return sum;
+    }
+
+    public List<String> topFeatures(int n)
+    {
+        List<Integer> order = new ArrayList<>();
+        for(int i = 0; i < weights.length; i++)
+        {
+            order.add(i);
+        }
+        order.sort((a, b) -> Double.compare(weights[b], weights[a]));
+        List<String> result = new ArrayList<>();
+
+        for(int j = 0; j < n && j < order.size(); j++)
+        {
+            int i = order.get(j);
+            result.add(String.format("%.3f", weights[i], featureNames.get(i)));
+        }
+        return result;
+    }
 }

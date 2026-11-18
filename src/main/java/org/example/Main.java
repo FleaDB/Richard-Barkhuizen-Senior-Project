@@ -35,12 +35,20 @@ public class Main
             }
         }
 
-        List<AprioriAlgorithm.Itemset> results = ap.mineFrequentItemsets(loader.getTransaction(uLeader), minSup);
-        System.out.println(results.size() + " itemsets for " + uLeader);
-        for(AprioriAlgorithm.Itemset s : results) System.out.println(s);
+        System.out.print("Which Algo 1-Apriori, 2-FP Growth: ");
+        int userPic = Integer.parseInt(in.nextLine().trim());
 
+        if(userPic == 1)
+        {
+            List<AprioriAlgorithm.Itemset> results = ap.mineFrequentItemsets(loader.getTransaction(uLeader), minSup);
+            System.out.println(results.size() + " itemsets for " + uLeader);
+            for(AprioriAlgorithm.Itemset s : results) System.out.println(s);
+        }
+        else if (userPic == 2)
+        {
+            runFPGrowth(loader, uLeader, minSup);
+        }
         System.out.println("\n\n");
-        runFPGrowth(loader, uLeader, minSup);
     }
     
     public static void runFPGrowth(deckLoader loader, String leader, double minSup)
