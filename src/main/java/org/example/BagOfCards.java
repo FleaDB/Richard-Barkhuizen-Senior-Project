@@ -97,5 +97,34 @@ public class BagOfCards
 
         weights = new double[featureNames.size()];
         bias = 0;
+
+        for(int train_pass = 0; train_pass < TRAINING_PASSES; train_pass++)
+        {
+            double [] gradient = new double[weights.length];
+            double biasGradient = 0;
+
+            for(int i = 0; i < n; i++)
+            {
+                double z = bias;
+                for(int f : active[i])
+                {
+                    z += weights[f];
+                }
+                double p = 1.0/ (1.0 + Math.exp(-z));
+
+                double error = p - label[i];
+                biasGradient += error;
+                for(int f : active[i])
+                {
+                    gradient[f] += error;
+                }
+            }
+
+            for(int f = 0; f < weights.length; f++)
+            {
+                weights[f] -= LEARNING_RATE * (gradient[f] / n + LAMBDA * weights[f]);
+            }
+            bias -= LEARNING_RATE * biasGradient / n;
+        }
     }
 }
