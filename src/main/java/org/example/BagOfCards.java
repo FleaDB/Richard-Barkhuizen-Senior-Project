@@ -83,4 +83,19 @@ public class BagOfCards
         }
         return result;
     }
+
+    public void train(List<deckLoader.DeckPlacements> training, int topCut)
+    {
+        int n = training.size();
+        int[][] active = new int [n][];
+        double[] label = new double[n];
+        for(int i = 0; i < n; i++)
+        {
+            active[i] = activeFeatures(training.get(i).cards);
+            label[i] = training.get(i).placement <= topCut ? 1 : 0;
+        }
+
+        weights = new double[featureNames.size()];
+        bias = 0;
+    }
 }
