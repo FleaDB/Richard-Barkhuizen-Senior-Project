@@ -128,7 +128,7 @@ public class BagOfCards
         }
     }
 
-    private double rating(Set<String> cards)
+    public double rating(Set<String> cards)
     {
         double sum = 0;
         for(int f: activeFeatures(cards))
