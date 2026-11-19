@@ -31,8 +31,23 @@ public class BagOfCardsEvaluation
             }
             i = j + 1;
         }
-
         return ranks;
+    }
+
+    static double spearman(double[] a, double [] b)
+    {
+        double[] rankA = ranks(a);
+        double[] rankB = ranks(b);
+
+        double meanA = 0;
+        double meanB = 0;
+        for(int i = 0; i < rankA.length; i++)
+        {
+            meanA += rankA[i];
+            meanB += rankB[i];
+        }
+        meanA /= rankA.length;
+        meanB /= rankB.length;
     }
 
     public static double accuracy(BagOfCards model, List<deckLoader.DeckPlacements> test)
