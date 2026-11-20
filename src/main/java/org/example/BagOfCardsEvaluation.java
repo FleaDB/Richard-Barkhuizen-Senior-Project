@@ -86,5 +86,9 @@ public class BagOfCardsEvaluation
         List<deckLoader.DeckPlacements> test = new ArrayList<>(shuffled.subList(0, testSize));
         List<deckLoader.DeckPlacements> training = new ArrayList<>(shuffled.subList(testSize, shuffled.size()));
 
+        List<List<deckLoader.DeckPlacements>> result = new ArrayList<>();
+        result.add(training);
+        result.add(test);
+        return result;
     }
 }
