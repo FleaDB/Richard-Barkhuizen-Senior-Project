@@ -75,6 +75,16 @@ public class BagOfCardsEvaluation
             rating[i] = model.rating(test.get(i).cards);
             goodness[i] = -test.get(i).placement;
         }
+        return spearman(rating, goodness);
+    }
+
+    public static List<List<deckLoader.DeckPlacements>> split (List<deckLoader.DeckPlacements> decks, double testShare, long seed)
+    {
+        List<deckLoader.DeckPlacements> shuffled = new ArrayList<>(decks);
+        Collections.shuffle(shuffled, new Random(seed));
+        int testSize = (int)Math.round(shuffled.size()*testShare);
+        List<deckLoader.DeckPlacements> test = new ArrayList<>(shuffled.subList(0, testSize));
+        List<deckLoader.DeckPlacements> training = new ArrayList<>(shuffled.subList(testSize, shuffled.size()));
 
     }
 }
