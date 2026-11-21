@@ -48,7 +48,12 @@ public class Main
         {
             runFPGrowth(loader, uLeader, minSup);
         }
-        System.out.println("\n\n");
+
+        List<deckLoader.DeckPlacements> decks = loader.getPlacementDeck(uLeader);
+        List<List<deckLoader.DeckPlacements>> parts = BagOfCardsEvaluation.split(decks, 0.1, 13); //test seed
+        List<deckLoader.DeckPlacements> training = parts.get(0);
+        List<deckLoader.DeckPlacements> test = parts.get(0);
+        System.out.println("\n\namount of decks -" + decks.size() + " training -" + training.size() + " test -" + test.size());
     }
     
     public static void runFPGrowth(deckLoader loader, String leader, double minSup)
