@@ -4,6 +4,14 @@ import java.util.*;
 
 public class Main
 {
+    interface Miner
+    {
+        List<AprioriAlgorithm.Itemset> mine(List<List<String>> transaction, double minSup);
+    }
+
+    private static final int TOP_CUT = 8;
+    private static final int MAX_PAIRS = 200;
+
     public static void main(String[] args) throws IOException
     {
 
@@ -29,9 +37,20 @@ public class Main
             }
             else
             {
-                System.out.print("Supp (0-100)%: ");
+                System.out.print("Support (0-100)%: ");
                 minSup = Double.parseDouble(in.nextLine().trim());
-                check = false;
+                while(check)
+                {
+                    if(minSup >=0 && minSup<=100)
+                    {
+                        check = false;
+                    }
+                    else
+                    {
+                        System.out.print("Please pick a support (0-100)%: ");
+                        minSup = Double.parseDouble(in.nextLine().trim());
+                    }
+                }
             }
         }
 
@@ -44,9 +63,34 @@ public class Main
             System.out.println(results.size() + " itemsets for " + uLeader);
             for(AprioriAlgorithm.Itemset s : results) System.out.println(s);
         }
-        else if (userPic == 2)
+        Miner miner = pickMiner(in);
+    }
+
+    private static Miner pickMiner(Scanner in)
+    {
+        AprioriAlgorithm apriori = new AprioriAlgorithm();
+        FrequentPatternGrowth fgGrowth = new FrequentPatternGrowth();
+
+        System.out.println("\nWhich algorithm would you like to use?");
+        System.out.println("\n(1) Apriori - simple and easy to follow. It builds the combinations level by level and counts each one.\n" +
+                "It tends to slow down when the support percentage is low or when the decks have many different (not that much in common)");
+        System.out.println("\n(2) Frequent Pattern Growth - Works faster at low support percentage. It puts all the decks into one compact tree and reads the\n" +
+                "combinations from it without testing candidates, however it is harder to follow its steps.");
+        System.out.println("\nThey both find the same combination of cards, however your choice can dictate how fast the results are printed.");
+
+        while(true)
         {
-            runFPGrowth(loader, uLeader, minSup);
+            System.out.println("\nWhich one would you like to use 1 or 2");
+            String userPick = in.nextLine().trim();
+            if(userPick.equals("1"))
+            {
+                return apriori::mineFrequentItemsets;
+            }
+            if (userPick.equals("2"))
+            {
+                return fgGrowth::mineFreqItemsets;
+            }
+            System.out.println("\n\nPlease entere either 1 or 2.");
         }
 
         List<deckLoader.DeckPlacements> decks = loader.getPlacementDeck(uLeader);
