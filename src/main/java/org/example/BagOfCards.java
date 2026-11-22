@@ -70,7 +70,7 @@ public class BagOfCards
         for(int i = 0; i < pairFeatures.size(); i++)
         {
             String[] pair = pairFeatures.get(i);
-            if(cards.contains(pair[0]) && cards.contains(pair[i]))
+            if(cards.contains(pair[0]) && cards.contains(pair[1]))
             {
                 active.add(pairFeatureNum.get(i));
             }
@@ -151,7 +151,7 @@ public class BagOfCards
         for(int j = 0; j < n && j < order.size(); j++)
         {
             int i = order.get(j);
-            result.add(String.format("%.3f", weights[i], featureNames.get(i)));
+            result.add(String.format("%.3f %s", weights[i], featureNames.get(i)));
         }
         return result;
     }

@@ -71,6 +71,16 @@ public class Main
         Miner miner = pickMiner(in);
         List<AprioriAlgorithm.Itemset> itemsets = miner.mine(tTransaction, minSup);
         printItemsets(itemsets, training.size(), minSup);
+
+        BagOfCards singles = new BagOfCards(training, new ArrayList<>(), TOP_CUT, 0);
+        BagOfCards pairs = new BagOfCards(training, itemsets, TOP_CUT, MAX_PAIRS);
+        System.out.println("Single cards: " + singles.featureCount() + " features, spearman " + String.format("%.3f", BagOfCardsEvaluation.accuracy(singles, test)));
+        System.out.println("\nSingle cards and pairs: " + pairs.featureCount() + " features, spearman: " + String.format("%.3f", BagOfCardsEvaluation.accuracy(pairs, test)));
+        System.out.println("\nStrongest features containing weight, card or pair:");
+        for(String line : pairs.topFeatures(10))
+        {
+            System.out.println(" " + line);
+        }
     }
 
     private static Miner pickMiner(Scanner in)
