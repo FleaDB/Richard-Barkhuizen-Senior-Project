@@ -34,6 +34,7 @@ public class deckLoader
     {
         Set<String> cards;
         int placement;
+        Map<String, Integer> copies = new HashMap<>();
 
         DeckPlacements(Set<String> cards, int placement)
         {
@@ -126,13 +127,16 @@ public class deckLoader
                 {
                     continue;
                 }
-
                 Set<String> cards = new HashSet<>();
+                Map<String, Integer> copies = new HashMap<>();
                 for(CardData c : d.deck)
                 {
                     cards.add(c.card_id);
+                    copies.merge(c.card_id, c.count, Integer::sum);
                 }
-                result.add(new DeckPlacements(cards, place));
+                DeckPlacements deck = new DeckPlacements(cards, place);
+                deck.copies = copies;
+                result.add(deck);
             }
         }
         return result;

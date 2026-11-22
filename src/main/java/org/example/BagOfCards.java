@@ -167,4 +167,10 @@ public class BagOfCards
         addPairfeatures(itemsets, maxPairs);
         train(trainingData, topCut);
     }
+
+    public double cardWeight(String card)
+    {
+        Integer feature = cardFeature.get(card);
+        return feature == null ? Double.NEGATIVE_INFINITY : weights[feature];
+    }
 }
