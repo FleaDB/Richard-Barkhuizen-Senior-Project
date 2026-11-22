@@ -11,6 +11,7 @@ public class Main
 
     private static final int TOP_CUT = 8;
     private static final int MAX_PAIRS = 200;
+    private static String minerUsed = "";
 
     public static void main(String[] args) throws IOException
     {
@@ -54,16 +55,22 @@ public class Main
             }
         }
 
-        System.out.print("Which Algo 1-Apriori, 2-FP Growth: ");
-        int userPic = Integer.parseInt(in.nextLine().trim());
+        List<deckLoader.DeckPlacements> decks = loader.getPlacementDeck(uLeader);
+        List<List<deckLoader.DeckPlacements>> parts = BagOfCardsEvaluation.split(decks, 0.1, 13); //test seed
+        List<deckLoader.DeckPlacements> training = parts.get(0);
+        List<deckLoader.DeckPlacements> test = parts.get(0);
+        System.out.println("\n\namount of decks that contain placements: " + decks.size()
+                + "\ntraining: " + training.size()
+                + "\ntest: " + test.size());
 
-        if(userPic == 1)
+        List<List<String>> tTransaction = new ArrayList<>();
+        for(deckLoader.DeckPlacements d : training)
         {
-            List<AprioriAlgorithm.Itemset> results = ap.mineFrequentItemsets(loader.getTransaction(uLeader), minSup);
-            System.out.println(results.size() + " itemsets for " + uLeader);
-            for(AprioriAlgorithm.Itemset s : results) System.out.println(s);
+            tTransaction.add(new ArrayList<>(d.cards));
         }
         Miner miner = pickMiner(in);
+        List<AprioriAlgorithm.Itemset> itemsets = miner.mine(tTransaction, minSup);
+        printItemsets(itemsets, training.size(), minSup);
     }
 
     private static Miner pickMiner(Scanner in)
@@ -84,28 +91,33 @@ public class Main
             String userPick = in.nextLine().trim();
             if(userPick.equals("1"))
             {
+                minerUsed = "Apriori";
                 return apriori::mineFrequentItemsets;
             }
             if (userPick.equals("2"))
             {
+                minerUsed = "Frequent Patter Growth";
                 return fgGrowth::mineFreqItemsets;
             }
             System.out.println("\n\nPlease entere either 1 or 2.");
         }
-
-        List<deckLoader.DeckPlacements> decks = loader.getPlacementDeck(uLeader);
-        List<List<deckLoader.DeckPlacements>> parts = BagOfCardsEvaluation.split(decks, 0.1, 13); //test seed
-        List<deckLoader.DeckPlacements> training = parts.get(0);
-        List<deckLoader.DeckPlacements> test = parts.get(0);
-        System.out.println("\n\namount of decks -" + decks.size() + " training -" + training.size() + " test -" + test.size());
     }
-    
-    public static void runFPGrowth(deckLoader loader, String leader, double minSup)
-    {
-        FrequentPatternGrowth fp = new FrequentPatternGrowth();
-        List<AprioriAlgorithm.Itemset> results = fp.mineFreqItemsets(loader.getTransaction(leader), minSup);
 
-        System.out.println("FP-Growth: " + results.size() + " itemsets for " + leader);
-        for(AprioriAlgorithm.Itemset s : results) System.out.println(s);
+    public static void printItemsets(List<AprioriAlgorithm.Itemset> itemsets, int decks, double minSup)
+    {
+        itemsets.sort((a, b) ->{
+            if(a.count != b.count)
+            {
+                return b.count - a.count;
+            }
+            return a.cards.toString().compareTo(b.cards.toString());
+        });
+
+        System.out.println("\nUsing "+ minerUsed + " " + itemsets.size() + " itemsets in the " + decks + " training decks with minSupport " + minSup + "%\n");
+        for(AprioriAlgorithm.Itemset is : itemsets)
+        {
+            System.out.println(is);
+        }
+        System.out.println("\n\n");
     }
 }
