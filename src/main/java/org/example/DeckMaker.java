@@ -38,4 +38,21 @@ public class DeckMaker
         int copies = (int)Math.round((double)total/used);
         return Math.max(1, Math.min(MAX_COPIES, copies));
     }
+
+    public static Map<String, Integer> makeDeck(List<String> core, List<deckLoader.DeckPlacements> decks, BagOfCards model)
+    {
+        Set<String> seen = new TreeSet<>();
+        for(deckLoader.DeckPlacements d : decks)
+        {
+            seen.addAll(d.cards);
+        }
+        List<String> extras = new ArrayList<>();
+        for(String card : seen)
+        {
+            if(!core.contains(card) && model.cardWeight(card) > 0)
+            {
+                extras.add(card);
+            }
+        }
+    }
 }
