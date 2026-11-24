@@ -50,20 +50,20 @@ public class BagOfCardsEvaluation
         meanB /= rankB.length;
 
         double agreement = 0;
-        double varA = 0;
-        double varB = 0;
+        double varPredict = 0;
+        double varActual = 0;
         for(int i = 0; i < rankA.length; i++)
         {
             agreement += (rankA[i] - meanA) * (rankB[i] - meanB);
-            varA += (rankA[i] - meanA) * (rankA[i] - meanA);
-            varB += (rankB[i] - meanB) * (rankB[i] - meanB);
+            varPredict += (rankA[i] - meanA) * (rankA[i] - meanA);
+            varActual += (rankB[i] - meanB) * (rankB[i] - meanB);
         }
 
-        if(varA == 0 || varB == 0)
+        if(varPredict == 0 || varActual == 0)
         {
             return 0;
         }
-        return agreement/Math.sqrt(varA*varB);
+        return agreement/Math.sqrt(varPredict* varActual);
     }
 
     public static double accuracy(BagOfCards model, List<deckLoader.DeckPlacements> test)

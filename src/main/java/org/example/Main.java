@@ -81,6 +81,8 @@ public class Main
         {
             System.out.println(" " + line);
         }
+
+        userSuggestedDeck(itemsets, training, singles, uLeader);
     }
 
     private static Miner pickMiner(Scanner in)
@@ -90,7 +92,7 @@ public class Main
 
         System.out.println("\nWhich algorithm would you like to use?");
         System.out.println("\n(1) Apriori - simple and easy to follow. It builds the combinations level by level and counts each one.\n" +
-                "It tends to slow down when the support percentage is low or when the decks have many different (not that much in common)");
+                "It tends to slow down when the support percentage is low or when the decks have many differences (not that much in common)");
         System.out.println("\n(2) Frequent Pattern Growth - Works faster at low support percentage. It puts all the decks into one compact tree and reads the\n" +
                 "combinations from it without testing candidates, however it is harder to follow its steps.");
         System.out.println("\nThey both find the same combination of cards, however your choice can dictate how fast the results are printed.");
@@ -109,7 +111,7 @@ public class Main
                 minerUsed = "Frequent Patter Growth";
                 return fgGrowth::mineFreqItemsets;
             }
-            System.out.println("\n\nPlease entere either 1 or 2.");
+            System.out.println("\n\nPlease enter either 1 or 2.");
         }
     }
 
@@ -129,5 +131,34 @@ public class Main
             System.out.println(is);
         }
         System.out.println("\n\n");
+    }
+
+    public static void userSuggestedDeck(List<AprioriAlgorithm.Itemset> itemsets, List<deckLoader.DeckPlacements> training, BagOfCards model, String uLeader)
+    {
+        AprioriAlgorithm.Itemset coreSet = DeckMaker.getCore(itemsets);
+        System.out.println("\nA suggested deck based on leader " + uLeader);
+        if(coreSet == null)
+        {
+            System.out.println("Coudln't suggest a deck. Maybe try a lower support.");
+        }
+
+        List<String> core = new ArrayList<>(coreSet.cards);
+        Collections.sort(core);
+        Map<String, Integer> deck = DeckMaker.makeDeck(core, training, model);
+
+        System.out.println("Core (" + core.size() + " cards)" + " played together in " + coreSet.count + " from " + training.size() + " training decks:");
+        int total = 0;
+        int shown = 0;
+        for(Map.Entry<String, Integer> card : deck.entrySet())
+        {
+            if(shown == core.size())
+            {
+                System.out.println("Extras (highest weight first):");
+            }
+            System.out.println(card.getValue() + "x " + card.getKey());
+            total += card.getValue();
+            shown++;
+        }
+        System.out.println("Total: " + total + " of " + DeckMaker.DECK_SIZE + " cards");
     }
 }
