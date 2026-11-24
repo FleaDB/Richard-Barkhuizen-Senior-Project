@@ -54,5 +54,23 @@ public class DeckMaker
                 extras.add(card);
             }
         }
+        extras.sort((a, b) -> Double.compare(model.cardWeight(b), model.cardWeight(a)));
+
+        List<String> order = new ArrayList<>(core);
+        order.addAll(extras);
+
+        Map<String, Integer> constructedDeck = new LinkedHashMap<>();
+        int size = 0;
+        for(String card : order)
+        {
+            if(size >= DECK_SIZE)
+            {
+                break;
+            }
+            int copies = Math.min(avgCopies(card, decks), DECK_SIZE - size);
+            constructedDeck.put(card, copies);
+            size += copies;
+        }
+        return constructedDeck;
     }
 }
