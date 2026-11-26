@@ -2,7 +2,7 @@ package org.example;
 
 import java.util.*;
 
-public class FrequentPatternGrowth
+public class FrequentPatternGrowth extends ItemsetMiner
 {
     private static class Node
     {
@@ -16,6 +16,12 @@ public class FrequentPatternGrowth
             this.card = card;
             this.parent = parent;
         }
+    }
+
+    @Override
+    public String name()
+    {
+        return "Frequent Pattern Growth";
     }
 
     private static class Tree
@@ -214,10 +220,10 @@ public class FrequentPatternGrowth
         }
     }
 
-    public List<AprioriAlgorithm.Itemset> mineFreqItemsets(List<List<String>> transaction, double minSup)
+    @Override
+    protected List<AprioriAlgorithm.Itemset> findItemsets(List<List<String>> transaction, int minCount)
     {
         int decks = transaction.size();
-        int minCount = (int)Math.ceil((minSup*decks)/100.0);
 
         Tree tree = buildTree(transaction, rankFrequent(transaction, minCount));
         List<AprioriAlgorithm.Itemset> result = new ArrayList<>();

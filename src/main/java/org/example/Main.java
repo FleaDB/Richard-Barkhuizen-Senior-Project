@@ -4,14 +4,8 @@ import java.util.*;
 
 public class Main
 {
-    interface Miner
-    {
-        List<AprioriAlgorithm.Itemset> mine(List<List<String>> transaction, double minSup);
-    }
-
     private static final int TOP_CUT = 8;
     private static final int MAX_PAIRS = 200;
-    private static String minerUsed = "";
 
     public static void main(String[] args) throws IOException
     {
@@ -68,9 +62,9 @@ public class Main
         {
             tTransaction.add(new ArrayList<>(d.cards));
         }
-        Miner miner = pickMiner(in);
+        ItemsetMiner miner = pickMiner(in);
         List<AprioriAlgorithm.Itemset> itemsets = miner.mine(tTransaction, minSup);
-        printItemsets(itemsets, training.size(), minSup);
+        printItemsets(itemsets, training.size(), minSup, miner.name());
 
         BagOfCards singles = new BagOfCards(training, new ArrayList<>(), TOP_CUT, 0);
         BagOfCards pairs = new BagOfCards(training, itemsets, TOP_CUT, MAX_PAIRS);
@@ -85,7 +79,7 @@ public class Main
         userSuggestedDeck(itemsets, training, singles, uLeader);
     }
 
-    private static Miner pickMiner(Scanner in)
+    private static ItemsetMiner pickMiner(Scanner in)
     {
         AprioriAlgorithm apriori = new AprioriAlgorithm();
         FrequentPatternGrowth fgGrowth = new FrequentPatternGrowth();
@@ -103,19 +97,17 @@ public class Main
             String userPick = in.nextLine().trim();
             if(userPick.equals("1"))
             {
-                minerUsed = "Apriori";
-                return apriori::mineFrequentItemsets;
+                return new AprioriAlgorithm();
             }
             if (userPick.equals("2"))
             {
-                minerUsed = "Frequent Patter Growth";
-                return fgGrowth::mineFreqItemsets;
+                return new FrequentPatternGrowth();
             }
             System.out.println("\n\nPlease enter either 1 or 2.");
         }
     }
 
-    public static void printItemsets(List<AprioriAlgorithm.Itemset> itemsets, int decks, double minSup)
+    public static void printItemsets(List<AprioriAlgorithm.Itemset> itemsets, int decks, double minSup, String minerName)
     {
         itemsets.sort((a, b) ->{
             if(a.count != b.count)
@@ -125,7 +117,7 @@ public class Main
             return a.cards.toString().compareTo(b.cards.toString());
         });
 
-        System.out.println("\nUsing "+ minerUsed + " " + itemsets.size() + " itemsets in the " + decks + " training decks with minSupport " + minSup + "%\n");
+        System.out.println("\nUsing "+ minerName + " " + itemsets.size() + " itemsets in the " + decks + " training decks with minSupport " + minSup + "%\n");
         for(AprioriAlgorithm.Itemset is : itemsets)
         {
             System.out.println(is);

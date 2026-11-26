@@ -2,7 +2,7 @@ package org.example;
 
 import java.util.*;
 
-public class AprioriAlgorithm
+public class AprioriAlgorithm extends ItemsetMiner
 {
     public static class Itemset
     {
@@ -23,11 +23,17 @@ public class AprioriAlgorithm
         }
     }
 
+    @Override
+    public String name()
+    {
+        return "Apriori";
+    }
+
     //need to pass a list of lists being the card ID
-    public List<Itemset> mineFrequentItemsets(List<List<String>> transaction, double minSup)
+    @Override
+    protected List<Itemset> findItemsets(List<List<String>> transaction, int minCount)
     {
         int decks = transaction.size();
-        int minCount = (int)Math.ceil((minSup*decks)/100.0);
         HashMap<String, Integer> singleCount = new HashMap<String, Integer>();
 
         //realised thats why the error was here, so deck had to also be a list as its one deck at a time

@@ -27,4 +27,9 @@ public class ProjectTests
         }
         return 0;
     }
+
+    public void checkMiner(ItemsetMiner miner)
+    {
+
+    }
 }
