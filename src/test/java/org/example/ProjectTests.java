@@ -77,4 +77,14 @@ public class ProjectTests
         assertEquals(1, loader.getTransaction("Leader1").get(0).size());//a needs to get one
         assertEquals(Integer.valueOf(4), loader.getPlacementDeck("Leader1").get(0).copies.get("A"));
     }
+
+    @Test
+    public void spearman()
+    {
+        double[] idk = {1,2,3,4,5};
+
+        assertEquals(1.0, BagOfCardsEvaluation.spearman(idk, new double[]{10,20,30,40,50}), 0.0001);
+        assertEquals(-1.0, BagOfCardsEvaluation.spearman(idk, new double[]{5,4,3,2,1}), 0.0001);
+        assertEquals(0.8, BagOfCardsEvaluation.spearman(idk, new double[]{2,1,4,3,5}), 0.0001);
+    }
 }
