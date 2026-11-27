@@ -102,7 +102,7 @@ public class ProjectTests
     public void splitTrainingAndTest()
     {
         List<deckLoader.DeckPlacements> decks = new ArrayList<>();
-        for(int i = 0; i <= 20; i++)
+        for(int i = 1; i <= 20; i++)
         {
             Set<String> cards = new HashSet<>();
             cards.add("A");
@@ -140,5 +140,34 @@ public class ProjectTests
         badDeck.add("Bad");
 
         assertTrue(model.rating(goodDeck)>model.rating(badDeck));
+    }
+
+    @Test
+    public void suggestedDeckContainsFullList()
+    {
+        List<deckLoader.DeckPlacements> training = new ArrayList<>();
+        for(int placement = 1; placement <= 20; placement++)
+        {
+            Set<String> cards = new HashSet<>();
+            int amt = placement <= 8 ? 40 : 10;
+            for(int i = 0; i < amt; i++)
+            {
+                cards.add("A" + i);
+            }
+            training.add(makeDeck(placement, cards));
+        }
+        BagOfCards model = new BagOfCards(training, new ArrayList<>(), 8, 0);
+
+        List<String> core = new ArrayList<>();
+        core.add("A0");
+        Map<String, Integer> suggested = DeckMaker.makeDeck(core, training, model);
+
+        int total = 0;
+        for(int copies : suggested.values())
+        {
+            assertTrue(copies >= 1 && copies <=4);
+            total += copies;
+        }
+        assertEquals(50, total);
     }
 }
