@@ -125,11 +125,12 @@ public class ProjectTests
     public void winningCardsAgainstLosingCards()
     {
         List<deckLoader.DeckPlacements> training = new ArrayList<>();
-        for(int placement = 1; placement <=20; placement++)
+        for(int placement = 1; placement <= 20; placement++)
         {
             Set<String> cards = new HashSet<>();
             cards.add("n");
             cards.add(placement <= 8 ? "Good" : "Bad");
+            training.add(makeDeck(placement, cards));
         }
         BagOfCards model = new BagOfCards(training, new ArrayList<>(), 8, 0);
 
