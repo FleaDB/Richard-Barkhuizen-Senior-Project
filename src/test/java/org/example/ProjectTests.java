@@ -87,4 +87,37 @@ public class ProjectTests
         assertEquals(-1.0, BagOfCardsEvaluation.spearman(idk, new double[]{5,4,3,2,1}), 0.0001);
         assertEquals(0.8, BagOfCardsEvaluation.spearman(idk, new double[]{2,1,4,3,5}), 0.0001);
     }
+
+    private deckLoader.DeckPlacements makeDeck(int placement, Set<String> cards)
+    {
+        deckLoader.DeckPlacements deck = new deckLoader.DeckPlacements(cards, placement);
+        for(String card : cards)
+        {
+            deck.copies.put(card, 4);
+        }
+        return deck;
+    }
+
+    @Test
+    public void splitTrainingAndTest()
+    {
+        List<deckLoader.DeckPlacements> decks = new ArrayList<>();
+        for(int i = 0; i <= 20; i++)
+        {
+            Set<String> cards = new HashSet<>();
+            cards.add("A");
+            decks.add(makeDeck(i, cards));
+        }
+        List<List<deckLoader.DeckPlacements>> part = BagOfCardsEvaluation.split(decks, 0.2, 42);
+        List<List<deckLoader.DeckPlacements>> reRun = BagOfCardsEvaluation.split(decks, 0.2, 42);
+
+        assertEquals(16, part.get(0).size());
+        assertEquals(4, part.get(1).size());
+        assertEquals(part.get(1), reRun.get(1));
+
+        for(deckLoader.DeckPlacements test : part.get(1))
+        {
+            assertFalse(part.get(0).contains(test));
+        }
+    }
 }
