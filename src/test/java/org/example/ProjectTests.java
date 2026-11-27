@@ -120,4 +120,24 @@ public class ProjectTests
             assertFalse(part.get(0).contains(test));
         }
     }
+
+    @Test
+    public void winningCardsAgainstLosingCards()
+    {
+        List<deckLoader.DeckPlacements> training = new ArrayList<>();
+        for(int placement = 1; placement <=20; placement++)
+        {
+            Set<String> cards = new HashSet<>();
+            cards.add("n");
+            cards.add(placement <= 8 ? "Good" : "Bad");
+        }
+        BagOfCards model = new BagOfCards(training, new ArrayList<>(), 8, 0);
+
+        Set<String> goodDeck = new HashSet<>();
+        Set<String> badDeck = new HashSet<>();
+        goodDeck.add("Good");
+        badDeck.add("Bad");
+
+        assertTrue(model.rating(goodDeck)>model.rating(badDeck));
+    }
 }
